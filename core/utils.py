@@ -14,6 +14,7 @@ from shutil import copyfile
 DEFAULT_LABEL_FILE = '../data/class_labels_indices.csv'
 DEFAULT_CSV_DATASET = '../data/unbalanced_train_segments.csv'
 DEFAULT_DEST_DIR = '../output/'
+DEFAULT_DEST_DIR = 'output/'
 DEFAULT_FS = 16000
 
 
@@ -35,7 +36,12 @@ def download(class_name, args):
     new_csv = create_csv(class_name, args)
     # construct path to destination dir
     dst_dir_root = args.destination_dir if args.destination_dir is not None else DEFAULT_DEST_DIR
-    dst_dir = os.path.join(dst_dir_root, class_name)  # Create directory to store found files
+    # dst_dir = os.path.join(dst_dir_root, class_name)  # Create directory to store found files
+
+    from pathlib import Path, PurePosixPath
+    dst_dir = PurePosixPath(dst_dir_root, class_name) # Create directory to store found files
+    dst_dir = str(dst_dir)
+    # print(dst_dir, str(dst_dir2))
 
     print("dst_dir: " + dst_dir)
 
@@ -48,10 +54,16 @@ def download(class_name, args):
 
         for row in reader:
             # print command for debugging
-            print("ffmpeg -ss " + str(row[1]) + " -t 10 -i $(youtube-dl -f 'bestaudio' -g https://www.youtube.com/watch?v=" +
-                       str(row[0]) + ") -ar " + str(DEFAULT_FS) + " -- \"" + dst_dir + "/" + str(row[0]) + "_" + row[1] + ".wav\"")
-            os.system(("ffmpeg -ss " + str(row[1]) + " -t 10 -i $(youtube-dl -f 'bestaudio' -g https://www.youtube.com/watch?v=" +
-                       str(row[0]) + ") -ar " + str(DEFAULT_FS) + " -- \"" + dst_dir + "/" + str(row[0]) + "_" + row[1] + ".wav\""))
+            # print('1', dst_dir2)
+            command = f"youtube-dl -x --audio-format wav -o {dst_dir}/{str(row[0])}_{str(row[1])}.wav " + "https://www.youtube.com/watch?v=" + str(row[0])
+            print(command)
+            os.system(command)
+            # os.system(f"youtube-dl --audio-format wav -o {dst_dir}/{str(row[0])}_{str(row[1])} " + "https://www.youtube.com/watch?v=" + str(row[0]))
+
+            # print("ffmpeg -ss " + str(row[1]) + " -t 10 -i $(youtube-dl -f 'bestaudio' -g https://www.youtube.com/watch?v=" +
+            #            str(row[0]) + ") -ar " + str(DEFAULT_FS) + " -- \"" + dst_dir + "/" + str(row[0]) + "_" + row[1] + ".wav\"")
+            # os.system(("ffmpeg -ss " + str(row[1]) + " -t 10 -i $(youtube-dl -f 'bestaudio' -g https://www.youtube.com/watch?v=" +
+            #            str(row[0]) + ") -ar " + str(DEFAULT_FS) + " -- \"" + dst_dir + "/" + str(row[0]) + "_" + row[1] + ".wav\""))
 
 
 def create_csv(class_name, args):
