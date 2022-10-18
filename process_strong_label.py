@@ -58,16 +58,6 @@ def download(split):
             # if audio_idx > max_len: 
             #     break
 
-            # print(audio_idx)
-            # command = f"youtube-dl -x --audio-format wav -o {dst_dir}/{row['segment_id']}.wav " + "https://www.youtube.com/watch?v=" + row['segment_id']
-            # command = rf"youtube-dl -x --audio-format mp3 -o data\strong\audioset_train_strong\Alarm/--CHY2qO5zc_30000.mp3 https://www.youtube.com/watch?v=--CHY2qO5zc_30000"
-            # print(audio_idx, command)
-            
-            # command = "ffmpeg" + " -i & "youtube-dl -f 'bestaudio' -g https://www.youtube.com/watch?v=" + \
-            #           row['segment_id']" + " -ar " + str(DEFAULT_FS) + " -- \"" + str(dst_dir) + "/" + row['segment_id'] + ".wav\""
-            # command = "ffmpeg" + " -i $(youtube-dl -f 'bestaudio' -g https://www.youtube.com/watch?v=" + \
-            #           row['segment_id'] + ") -ar " + str(DEFAULT_FS) + " -- \"" + str(dst_dir) + "/" + row['segment_id'] + ".wav\""
-
             # command = (
             #     f'ffmpeg -i \'"$(youtube-dl -f {"bestaudio"} -g https://www.youtube.com/watch?v='
             #     f'{row["segment_id"]})"\' -ar {DEFAULT_FS} -- "{row["segment_id"]}.wav"'
